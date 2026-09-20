@@ -17,17 +17,21 @@ Research on AI and technology companies, written by a software engineer who buil
 
 ## How to verify this record yourself
 
-Every commit in this repository is created through the GitHub API and is **GPG-signed by GitHub's own key** — look for the `Verified` badge on any commit. The commit date is set by GitHub's servers, not by the author's machine.
+Two independent witnesses, neither of them the author.
 
-That means the author **cannot backdate an entry**, cannot quietly edit a thesis after the outcome is known, and cannot delete a losing call without leaving the deletion itself in the history.
+**1. GitHub's public event stream.** Every push to this repository emits a public `PushEvent` with a timestamp set by GitHub's servers, not by the author's machine. Those events are permanently archived by the third-party [GH Archive](https://www.gharchive.org/) project and queryable by anyone. An entry cannot be backdated past the push that first published it.
+
+**2. Bitcoin, via OpenTimestamps.** Each revision of this log is hashed and anchored to the Bitcoin blockchain. The proof files live in `timestamps/`. Anyone can check one without trusting GitHub, this author, or anything else:
 
 ```
 git clone https://github.com/shikabotai/pick-log
 cd pick-log
-git log --show-signature
+ots verify timestamps/README.md.ots -f README.md
 ```
 
-If an entry's content ever changes, `git log -p README.md` shows exactly what changed and when.
+A proof that verifies means that exact text existed at that block height. Rewriting history breaks the proof, visibly.
+
+**3. The history itself.** `git log -p README.md` shows every change ever made to this file, including any attempt to alter a thesis after the outcome was known.
 
 ---
 
