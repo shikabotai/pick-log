@@ -31,6 +31,13 @@ ots verify timestamps/README.md.ots -f README.md
 
 A proof that verifies means that exact text existed at that block height. Rewriting history breaks the proof, visibly.
 
+`timestamps/README.md.ots` always stamps the **current** README. Every earlier revision keeps its own proof, named for the commit it stamps, and none is ever deleted — see `timestamps/INDEX.md`. To check an old one, pull that revision out of git history and verify against it:
+
+```
+git show df85e73:README.md > /tmp/old-README.md
+ots verify timestamps/README.md.df85e73.ots -f /tmp/old-README.md
+```
+
 **3. The history itself.** `git log -p README.md` shows every change ever made to this file, including any attempt to alter a thesis after the outcome was known.
 
 ---
@@ -81,4 +88,12 @@ Backfilling a price is the **only** retroactive edit this file permits. Thesis, 
 
 ## Disclaimer
 
-Nothing in this repository is investment advice, a recommendation, or a solicitation to buy or sell any security. It is a personal research record published for accountability. The author is not a registered investment adviser or broker-dealer. Any position held is disclosed in the entry. Past performance does not predict future results. You are responsible for your own decisions.
+*Standing disclaimer v1, in force from 2026-09-20. This text is versioned, not edited in place: changing a word publishes a v2 block below and leaves v1 standing, so any archived post can be matched to the disclaimer that was in force when it went out. The git history of this file is the proof of which was which.*
+
+**Disclaimer.** This is not investment advice and nothing here is a recommendation to buy or sell any security. I am not a registered investment adviser, broker-dealer, or financial planner, and nothing published here is tailored to your situation, your holdings, or your risk tolerance. It is general commentary, published on a schedule, identical for every reader.
+
+**Position disclosure.** I hold long equity positions, disclosed per-ticker whenever a specific name is discussed. I may add to, reduce, or close any position at any time, including immediately after publishing, and I am under no obligation to tell you when I do.
+
+**The record.** Every call is timestamped before it's published and nothing is ever deleted — losers included, scored against QQQ from the same timestamp: github.com/shikabotai/pick-log
+
+You are responsible for your own money. Do your own work.
