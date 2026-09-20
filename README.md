@@ -26,39 +26,30 @@ Two independent witnesses, neither of them the author.
 ```
 git clone https://github.com/shikabotai/pick-log
 cd pick-log
-ots verify timestamps/README.md.ots -f README.md
+ots verify timestamps/log.md.ots -f log.md        # the entries
+ots verify timestamps/README.md.ots -f README.md  # the rules
 ```
 
 A proof that verifies means that exact text existed at that block height. Rewriting history breaks the proof, visibly.
 
-`timestamps/README.md.ots` always stamps the **current** README. Every earlier revision keeps its own proof, named for the commit it stamps, and none is ever deleted — see `timestamps/INDEX.md`. To check an old one, pull that revision out of git history and verify against it:
+**Two chains, one per file.** `log.md` holds the entries and is stamped every time an entry or a backfill lands; `README.md` holds the rules and is stamped only when the rules change. A broken README proof is therefore always an editorial event, never a side effect of logging a call.
+
+`timestamps/<file>.ots` always stamps the **current** revision of that file. Every earlier revision keeps its own proof, named for the commit it stamps, and none is ever deleted — see `timestamps/INDEX.md`. To check an old one, pull that revision out of git history and verify against it:
 
 ```
 git show df85e73:README.md > /tmp/old-README.md
 ots verify timestamps/README.md.df85e73.ots -f /tmp/old-README.md
 ```
 
-**3. The history itself.** `git log -p README.md` shows every change ever made to this file, including any attempt to alter a thesis after the outcome was known.
+**3. The history itself.** `git log -p log.md` shows every change ever made to the entries, including any attempt to alter a thesis after the outcome was known. `git log -p README.md` does the same for the rules.
 
 ---
 
-## Open calls
+## The entries
 
-| # | Date/time (ET) | Ticker | Direction | Entry price | Price source | QQQ at entry | Thesis | Exit rule | Position held | Post |
-|---|---|---|---|---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — | — | — | — | — |
-
-*No entries yet. This file exists before the first call on purpose — the empty state is part of the proof.*
-
----
-
-## Closed calls
-
-| # | Ticker | Opened | Closed | Reason closed | Return | QQQ same window | Result |
-|---|---|---|---|---|---|---|---|
-| — | — | — | — | — | — | — | — |
-
-*Expected to fill with losers. They stay.*
+Every open and closed call lives in **[`log.md`](log.md)**, together with the price-field rule that
+governs them. This file holds the rules, the verification instructions and the disclaimer; that file
+holds the record. The two carry **separate proof chains** — see `timestamps/INDEX.md`.
 
 ---
 
@@ -73,16 +64,6 @@ No scorecard yet — the first one is published after the first full month of en
 ## What is not in this repository
 
 Personal holdings and private research are **not** published here and never will be. Research on a position already owned is not a call, and mixing the two would corrupt this record before it starts. Only forward-looking, publicly-posted calls appear in this file.
-
----
-
-## Price fields
-
-An entry may open with `PENDING-BACKFILL` in the price column as long as **timestamp, ticker, direction, thesis and exit rule are complete**. Those are the fields that prove the call; the price is arithmetic added afterwards.
-
-Every backfilled price is written as `<price> (backfilled YYYY-MM-DD, source: <source>)`. A price appearing without a backfill stamp marks the entry disputed.
-
-Backfilling a price is the **only** retroactive edit this file permits. Thesis, direction, exit rule and timestamp are frozen at entry, and the git history proves it.
 
 ---
 
