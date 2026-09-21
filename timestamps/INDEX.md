@@ -14,7 +14,8 @@ revision pulled out of git history.
 
 | Proof file | Stamps `log.md` as of | Covers |
 |---|---|---|
-| `log.md.ots` | current `HEAD` (2026-09-20) | First stamp of this chain. Open calls and closed calls split out of `README.md`, both tables still empty, plus the price-fields rule. |
+| `log.md.ff3a041.ots` | commit `ff3a041` (2026-09-20) | First stamp of this chain. Open calls and closed calls split out of `README.md`, both tables still empty, plus the price-fields rule. |
+| `log.md.ots` | current `HEAD` (2026-09-20) | Adds the **benchmark leg** rules to `## Price fields` — both price cells are the entry date's close (a stated correction to Rule 3's "same timestamp"), both legs pulled in one session and filled in one commit, and a permanent `UNBENCHMARKED` mark on any row past the next-trading-day deadline. |
 
 ## `README.md` — the rules
 
