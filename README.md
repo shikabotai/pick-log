@@ -43,6 +43,18 @@ ots verify timestamps/README.md.df85e73.ots -f /tmp/old-README.md
 
 **3. The history itself.** `git log -p log.md` shows every change ever made to the entries, including any attempt to alter a thesis after the outcome was known. `git log -p README.md` does the same for the rules.
 
+**4. Every commit that touched a stamped file re-stamped it.** The rule is that a commit changing `log.md` or `README.md` without a matching new proof in the same commit marks that entry **disputed** — not deleted, not quietly fixed, marked. You do not have to take that on trust. Run it on any commit:
+
+```
+c=$(git show --pretty= --name-only <sha>)
+for f in README.md log.md; do
+  echo "$c" | grep -qx "$f" || continue
+  echo "$c" | grep -qx "timestamps/$f.ots" || echo "DISPUTED: $f edited without re-stamp"
+done
+```
+
+Note what this check deliberately does **not** accept as evidence: a change to `timestamps/INDEX.md`. The index is prose, and it is edited on every single entry — so "the commit touched `timestamps/`" proves nothing. Only a new `timestamps/<file>.ots` does.
+
 ---
 
 ## The entries
