@@ -24,7 +24,8 @@ revision pulled out of git history.
 | `README.md.df85e73.ots` | commit `df85e73` (2026-09-19) | Genesis rules + corrected verification section. Entry tables still in README. No disclaimer v1. |
 | `README.md.3ee2826.ots` | commit `3ee2826` (2026-09-20) | Same, plus standing disclaimer v1 under `## Disclaimer`. Entry tables still in README. |
 | `README.md.1aeb6d1.ots` | commit `1aeb6d1` (2026-09-20) | Entry tables and the price-fields rule moved out to `log.md`; README points at it; verification section documents both chains. Three witnesses listed, no re-stamp check. |
-| `README.md.ots` | current `HEAD` (2026-09-20) | Adds **witness 4** to the verification section — the reader-runnable check that any commit touching a stamped file also re-stamped it, plus the warning that a `timestamps/INDEX.md` change is not evidence of a re-stamp. |
+| `README.md.3fbdf80.ots` | commit `3fbdf80` (2026-09-20) | Adds **witness 4** to the verification section — the reader-runnable check that any commit touching a stamped file also re-stamped it, plus the warning that a `timestamps/INDEX.md` change is not evidence of a re-stamp. |
+| `README.md.ots` | current `HEAD` (2026-09-20) | Adds **witness 5** — how to read the result of `ots verify`, which exits `1` on a sound record, on a bad one and on a mistyped command alike. Names the four output messages, the node-free digest check, and the two-explorer block check. |
 
 Verify a current one:
 
@@ -32,6 +33,10 @@ Verify a current one:
 ots verify timestamps/log.md.ots -f log.md
 ots verify timestamps/README.md.ots -f README.md
 ```
+
+**`ots verify` exits `1` even when the record is sound** — it cannot reach a Bitcoin node on a normal
+machine. Read the printed message, not the exit code, and see witness 5 in `README.md` before
+concluding anything from a failure.
 
 Verify an archived one:
 

@@ -55,6 +55,47 @@ done
 
 Note what this check deliberately does **not** accept as evidence: a change to `timestamps/INDEX.md`. The index is prose, and it is edited on every single entry — so "the commit touched `timestamps/`" proves nothing. Only a new `timestamps/<file>.ots` does.
 
+**5. Reading the result of witness 2 — the message, not the exit code.** Measured on this repository, 2026-09-20.
+
+`ots verify` **exits `1` on a sound record**, and exits `1` on a bad one, and exits `1` when you typed the command wrong. The exit code carries no information at all. The first line of output does. Four outcomes:
+
+| What it prints | What happened | Is the record sound? |
+|---|---|---|
+| `Could not connect to Bitcoin node: …` | You have no Bitcoin node. The digest already matched; `ots` got as far as checking the block and stopped. | **Yes. On a machine with no node, this is the pass.** |
+| `Assuming target filename is …` then `Could not open target: …` | You left out `-f`, so `ots` guessed a filename that does not exist. | Unjudged — nothing was checked. Re-run with `-f`. |
+| `File does not match original!` | The file you passed does not hash to the digest in the proof. | **Either the file was altered, or you passed the wrong file.** Settle it below. |
+| `Success! Bitcoin block N attests existing data as of …` | Full verification against a node. | Yes, confirmed to a block. |
+
+So a reader without a Bitcoin node — which is nearly every reader — **can never get a success line out of `ots verify`.** The node error is the best answer this command can give you. Reading it as tampering is the mistake this witness exists to prevent.
+
+`-f` is not optional. Both argument orders are identical:
+
+```
+ots verify -f log.md timestamps/log.md.ots
+ots verify timestamps/log.md.ots -f log.md
+```
+
+**`File does not match original!` is not by itself evidence of tampering.** It prints the same line when you simply aim the command at the wrong file — checked here by verifying `README.md` against `log.md`'s proof, which is innocent and indistinguishable. Settle it with the digest, which needs no node and no network:
+
+```
+shasum -a 256 log.md                      # 25e4ceb...
+ots info timestamps/log.md.ots | head -1  # File sha256 hash: 25e4ceb...
+```
+
+If those two strings are equal, the file on your disk is byte-for-byte the file that was stamped. **That is the entire tamper check, and it does not require a Bitcoin node** — a node is only needed to confirm *which block* the stamp landed in.
+
+**To confirm the block without a node**, read it off the proof and check it against explorers you pick yourself:
+
+```
+ots info timestamps/log.md.ots | grep -i bitcoin
+#     verify BitcoinBlockHeaderAttestation(967920)
+#     # Bitcoin block merkle root 8affbc39...
+```
+
+Look up that block height on **two** independent explorers and confirm the merkle root matches. Two, not one: a single explorer agreeing with `ots` proves nothing that a single bad source could not fake.
+
+**A fresh stamp is pending for hours.** A proof created in the last few hours has no Bitcoin attestation yet — `ots info` shows only `PendingAttestation` lines, and that is not a failure. It is the anchor waiting to be mined. In that window the entry is defended by witnesses 1 and 3, not by Bitcoin.
+
 ---
 
 ## The entries
